@@ -9,11 +9,12 @@ namespace Simple_String_Calculator
     {
         public int[] iNumbers { get; set; }
         public int sum;
+     
 
         public int Add(string numbers)
         {
             sum = 0;
-            if (string.IsNullOrEmpty(numbers)) return sum;
+            if (string.IsNullOrWhiteSpace(numbers)) return sum;
             iNumbers = ConvertToIntegers(numbers);
             foreach (var i in iNumbers)
             {
@@ -23,9 +24,16 @@ namespace Simple_String_Calculator
         }
         public int[] ConvertToIntegers(string numbers)
         {
-            string[] str_num = numbers.Split(',', '\n').ToArray();
-            int[] int_num = Array.ConvertAll(str_num, Int32.Parse);
-            return int_num;
+           iNumbers = numbers.Split(',','\n')
+                             .Select(x => { if (Int32.TryParse(x, out var num)) return num;
+                                 else
+                                     throw new Exception("Element is Not a Number");
+                             }
+                             
+                             )
+                             .ToArray();
+            
+            return iNumbers;
         }
     }
 }
