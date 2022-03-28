@@ -21,7 +21,7 @@ namespace Simple_String_Calculator
             ConvertToIntegers(numbers);
             NegativeNumberCheck();
             if (negativeNumbers.Length ==0 ) {
-                foreach (var i in iNumbers)
+                foreach (var i in IgnoreBigNum())
                 {
                     sum = sum + i;
                 }
@@ -39,6 +39,10 @@ namespace Simple_String_Calculator
         public void NegativeNumberCheck() {
             negativeNumbers = iNumbers.Where(i=> i < 0).ToArray();
                    
+        }
+        public int[] IgnoreBigNum() {
+            int [] nums = iNumbers.Where(i => i <1001 ).ToArray();
+            return nums;
         }
         public void ConvertToIntegers(string numbers) {
             numbers = Delimiters(numbers);
