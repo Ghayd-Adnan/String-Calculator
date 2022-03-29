@@ -7,7 +7,7 @@ namespace Simple_String_Calculator
         static void Main(string[] args)
         {
             StringCalculator str_cal = new StringCalculator();
-            Console.WriteLine("The Result = " + str_cal.Add("//;\n2;5;1001"));
+            Console.WriteLine("The Result = " + str_cal.Add("-1,5,-8"));
            
         }
     }

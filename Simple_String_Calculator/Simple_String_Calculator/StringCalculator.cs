@@ -11,60 +11,96 @@ namespace Simple_String_Calculator
         public int[] negativeNumbers { get; set; }
         public int sum;
         public char delimiters;
-       
-
+        public static Nullable<int> nullValue = null;
 
         public int Add(string numbers)
         {
-            sum = 0;
-            if (string.IsNullOrEmpty(numbers)) return sum;
-            ConvertToIntegers(numbers);
-            NegativeNumberCheck();
-            if (negativeNumbers.Length ==0 ) {
-                foreach (var i in IgnoreBigNum())
+            try
+            {
+                sum = 0;
+                if (string.IsNullOrEmpty(numbers)) return sum;
+                ConvertToIntegers(numbers);
+                int[] ignoreBigNumbers = IgnoreBigNum();
+                NegativeNumberCheck();
+                if (negativeNumbers.Length == 0)
                 {
-                    sum = sum + i;
+                    foreach (var i in ignoreBigNumbers)
+                    {
+                        sum = sum + i;
+                    }
+
                 }
+                else
+                     throw new Exception();
+
+
                 
+                return sum;
             }
-            else {
-               
-                string msg= "Negative Not Allowed: "+ string.Join(", ",negativeNumbers);
-                throw new Exception (msg);
-
+            catch {
+                Console.WriteLine("Negative Not Allowed: " + string.Join(", ", negativeNumbers));
+                return sum;
             }
-            return sum;
-
+                
+            
         }
-        public void NegativeNumberCheck() {
+        private void NegativeNumberCheck() {
             negativeNumbers = iNumbers.Where(i=> i < 0).ToArray();
                    
         }
-        public int[] IgnoreBigNum() {
+        private int[] IgnoreBigNum() {
             int [] nums = iNumbers.Where(i => i <1001 ).ToArray();
             return nums;
         }
-        public void ConvertToIntegers(string numbers) {
-            numbers = Delimiters(numbers);
-            iNumbers = numbers.Split(delimiters, '\n')
-                            .Select(x => {
-                                if (Int32.TryParse(x, out var num)) return num;
-                                else
-                                    throw new Exception("Element is Not a Number");
-                                    
-                            })
-                            .ToArray();
+        private void ConvertToIntegers(string numbers)
+        {
+            try
+            {
+                numbers = ExtractDelimiters(numbers);
 
-            
-        }
-        public string Delimiters(string numbers) {
-            delimiters = ',';
-            if (numbers.StartsWith("//")) {
-                delimiters = numbers[2];
-                numbers = numbers.Substring(4);
+                iNumbers = numbers.Split(delimiters, '\n')
+                                    .Select(x =>
+                                    {
+                                        if (Int32.TryParse(x, out var num)) return num;
+                                        else
+                                            throw new Exception();
+
+                                    })
+                                    .ToArray();
             }
-          return numbers;
-        
+            catch {
+                Console.WriteLine("Element is Not a Number");
+            }
+           
+           
+        }
+        private string ExtractDelimiters(string numbers) {
+            try
+            {
+                if (numbers.Length < 3 && numbers.StartsWith("//"))
+                {
+                    throw new Exception();
+
+                }
+                else
+                {
+                    delimiters = ',';
+                    if (numbers.StartsWith("//"))
+                    {
+                        delimiters = numbers[2];
+                        numbers = numbers.Substring(4);
+                    }
+                    return numbers;
+                }
+            }
+            catch {
+                   
+                Console.WriteLine("Error You Does Not Enter Any Number");
+                string zero = "0";
+                return zero;
+            }
+
+
         }
     }
 }
